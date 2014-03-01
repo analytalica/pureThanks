@@ -48,7 +48,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.0.5";
+            return "1.0.6";
         }
 
         public string GetPluginAuthor()
@@ -353,8 +353,8 @@ namespace PRoConEvents
                 catch (Exception z)
                 {
                     toConsole(1, "Invalid time delay! Use integer values only.");
-                    timeDelay = 15;
-                    timeDelayString = "15";
+                    timeDelay = 25;
+                    timeDelayString = "25";
                 }
             }
             else if (strVariable.Contains("Thanks Message"))
