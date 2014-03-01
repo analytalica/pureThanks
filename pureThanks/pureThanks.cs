@@ -48,7 +48,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.0.6";
+            return "1.0.7";
         }
 
         public string GetPluginAuthor()
@@ -70,8 +70,8 @@ namespace PRoConEvents
 <li>In the 'Thanks Message' text, add [LIST] to insert the player list. It is replaced with 'player1, player2, ..., and playerN.' with special cases 'player1' and 'player1 and player2.' when there are only one or two set found players online, respectively.
 <li>The 'Message Time Delay' adjusts the amount of time, in seconds, after the round ends to send the message.</li>
 <li>Type anything into 'Test output...' to simulate a round over event, causing the (delayed) output to run.</li>
-</ul>
-<b>Managing players:</b>
+</ul></p>
+<p><b>Managing players:</b>
 <ul>
 <li>Type a Battlelog soldier name into 'Add a soldier name...' and that player will be added to the liset.</li>
 <li>Soldier names are automatically sorted alphabetically.</li>
