@@ -48,7 +48,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.0.7";
+            return "1.1.4";
         }
 
         public string GetPluginAuthor()
@@ -104,10 +104,14 @@ namespace PRoConEvents
 
         public void chatOut(object source, ElapsedEventArgs e)
         {
-            if (chatQueue.Count > 0)
+            if (pluginEnabled)
             {
-                this.ExecuteCommand("procon.protected.send", "admin.say", chatQueue.Dequeue(), "all");
-                toConsole(3, "Chat output...");
+                toConsole(2, "chatTimer ticking...");
+                if (chatQueue.Count > 0)
+                {
+                    this.ExecuteCommand("procon.protected.send", "admin.say", chatQueue.Dequeue(), "all");
+                    toConsole(3, "Chat output...");
+                }
             }
         }
 
@@ -147,12 +151,19 @@ namespace PRoConEvents
         public void OnPluginLoaded(string strHostName, string strPort, string strPRoConVersion)
         {
             this.RegisterEvents(this.GetType().Name, "OnPluginLoaded", "OnRoundOver", "OnListPlayers");
+            this.chatTimer.Stop();
+            this.chatTimer = new Timer();
+            this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
+            this.chatTimer.Interval = 400;
+            this.chatTimer.Start();
+            this.toConsole(2, "chatTimer Enabled!");
         }
 
         public void OnPluginEnable()
         {
             this.pluginEnabled = true;
             this.toConsole(1, "pureThanks Enabled!");
+            this.chatTimer.Stop();
             this.chatTimer = new Timer();
             this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
             this.chatTimer.Interval = 400;
@@ -359,7 +370,15 @@ namespace PRoConEvents
             }
             else if (strVariable.Contains("Thanks Message"))
             {
-                thanksMessage = strValue.Trim();
+                if (!String.IsNullOrEmpty(strValue.Trim()))
+                {
+                    thanksMessage = strValue.Trim();
+                }
+                else
+                {
+                    toConsole(1, "Resetting thanks message...");
+                    thanksMessage = "Thanks to our active donors & volunteers online: [LIST]";
+                }
             }
             else if (strVariable.Contains("Test output..."))
             {
