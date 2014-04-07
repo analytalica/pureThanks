@@ -34,6 +34,7 @@ namespace PRoConEvents
         private Timer thanksTimer = new Timer();
         public string thanksOutput = "";
         private Timer chatTimer = new Timer();
+		private Timer listPlayersTimer = new Timer();
         private Queue<String> chatQueue = new Queue<String>();
 
         public pureThanks()
@@ -48,7 +49,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.1.4";
+            return "1.3.0";
         }
 
         public string GetPluginAuthor()
@@ -104,36 +105,18 @@ namespace PRoConEvents
 
         public void chatOut(object source, ElapsedEventArgs e)
         {
-            if (pluginEnabled)
+            if (this.pluginEnabled)
             {
-                toConsole(2, "chatTimer ticking...");
+                this.toConsole(2, "chatTimer ticking...");
                 if (chatQueue.Count > 0)
                 {
-                    this.ExecuteCommand("procon.protected.send", "admin.say", chatQueue.Dequeue(), "all");
-                    toConsole(3, "Chat output...");
+					string nextOutput = chatQueue.Dequeue();
+                    this.ExecuteCommand("procon.protected.send", "admin.say", nextOutput, "all");
+                    this.toConsole(1, "Chat output: " + nextOutput);
                 }
             }
         }
 
-        #region player chat function
-        public void toChat(String message, String playerName)
-        {
-            if (!message.Contains("\n") && !String.IsNullOrEmpty(message))
-            {
-                toConsole(2, "Sent to chat: \"" + message + "\" to player: " + playerName);
-                this.ExecuteCommand("procon.protected.send", "admin.say", message, "player", playerName);
-            }
-            else if (message != "\n")
-            {
-                string[] multiMsg = message.Split(new string[] { "\n" }, StringSplitOptions.None);
-                foreach (string send in multiMsg)
-                {
-                    System.Threading.Thread.Sleep(400);
-                    toChat(send, playerName);
-                }
-            }
-        }
-        #endregion
         public void toConsole(int msgLevel, String message)
         {
             if (debugLevel >= msgLevel)
@@ -154,9 +137,15 @@ namespace PRoConEvents
             this.chatTimer.Stop();
             this.chatTimer = new Timer();
             this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
-            this.chatTimer.Interval = 400;
+            this.chatTimer.Interval = 800;
             this.chatTimer.Start();
             this.toConsole(2, "chatTimer Enabled!");
+			this.listPlayersTimer.Stop();
+			this.listPlayersTimer = new Timer();
+			this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
+			this.listPlayersTimer.Interval = 5000;
+			this.listPlayersTimer.Start();
+			this.toConsole(2, "listPlayersTimer Enabled!");
         }
 
         public void OnPluginEnable()
@@ -166,9 +155,15 @@ namespace PRoConEvents
             this.chatTimer.Stop();
             this.chatTimer = new Timer();
             this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
-            this.chatTimer.Interval = 400;
+            this.chatTimer.Interval = 800;
             this.chatTimer.Start();
             this.toConsole(2, "chatTimer Enabled!");
+			this.listPlayersTimer.Stop();
+			this.listPlayersTimer = new Timer();
+			this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
+			this.listPlayersTimer.Interval = 5000;
+			this.listPlayersTimer.Start();
+			this.toConsole(2, "listPlayersTimer Enabled!");
             //creditDonators();
         }
 
@@ -178,14 +173,28 @@ namespace PRoConEvents
             //creditDonators();
             this.chatTimer.Stop();
             this.thanksTimer.Stop();
+			this.listPlayersTimer.Stop();
             this.toConsole(1, "pureThanks Disabled!");
             this.pluginEnabled = false;
         }
+		
+		public void callListPlayers(object source, ElapsedEventArgs e){
+			if(this.pluginEnabled){
+				this.toConsole(2, "Calling list players...");
+				this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
+			}
+		}
 
         public override void OnListPlayers(List<CPlayerInfo> players, CPlayerSubset subset)
         {
             if (this.pluginEnabled)
             {
+				this.listPlayersTimer.Stop();
+				this.listPlayersTimer = new Timer();
+				this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
+				this.listPlayersTimer.Interval = 5000;
+				this.listPlayersTimer.Start();
+				
                 List<String> newOnlineList = new List<String>();
                 toConsole(2, "Player list obtained.");
                 foreach (CPlayerInfo player in players)
@@ -264,7 +273,7 @@ namespace PRoConEvents
             if(theList.Length > 0){
                 this.thanksOutput = thanksMessage.Replace("[LIST]", "\n" + theList + "\n");
                 if (timeDelay < 2) {
-                    toChat(thanksOutput);
+                    toChat(this.thanksOutput);
                     this.thanksTimer.Stop();
                 }
                 else
@@ -279,7 +288,7 @@ namespace PRoConEvents
 
         public void thanksOut(object source, ElapsedEventArgs e)
         {
-            toChat(thanksOutput);
+            toChat(this.thanksOutput);
             this.thanksTimer.Stop();
         }
 
