@@ -58,7 +58,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.5.1";
+            return "1.5.2";
         }
 
         public string GetPluginAuthor()
@@ -137,7 +137,7 @@ namespace PRoConEvents
         {
             if (this.pluginEnabled)
             {
-                this.toConsole(2, "chatTimer ticking...");
+                //this.toConsole(2, "chatTimer ticking...");
                 if (chatQueue.Count > 0)
                 {
 					string nextOutput = chatQueue.Dequeue();
@@ -188,6 +188,15 @@ namespace PRoConEvents
 			this.listAdminsTimer.Stop();
 
             this.toConsole(2, "listAdminsTimer Initialized!");
+
+            this.thanksTimer.Stop();
+            this.thanksTimer = new Timer();
+            this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
+            this.thanksTimer.Interval = timeDelay * 1000;
+            this.thanksTimer.Start();
+            this.thanksTimer.Stop();
+
+            this.toConsole(2, "thanksTimer Initialized!");
         }
 
         public void OnPluginEnable()
@@ -215,6 +224,15 @@ namespace PRoConEvents
             this.listAdminsTimer.Start();
 
 			this.toConsole(2, "listPlayersTimer and listAdminsTimer Enabled!");
+
+            this.thanksTimer.Stop();
+            this.thanksTimer = new Timer();
+            this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
+            this.thanksTimer.Interval = timeDelay * 1000;
+            this.thanksTimer.Start();
+            this.thanksTimer.Stop();
+
+            this.toConsole(2, "thanksTimer Initialized!");
             //creditDonators();
         }
 
@@ -358,67 +376,91 @@ namespace PRoConEvents
         
         public void creditDonators()
         {
-            toConsole(1, "Crediting donators and volunteers...");
-            String theList = "";
-            #region Debug outputs
-            if (debugLevel > 2)
+            if (pluginEnabled)
             {
-                toConsole(3, "Debug level greater than 2. Test output enabled.");
-                switch (debugLevel)
+                toConsole(1, "Crediting donators and volunteers...");
+                String theList = "";
+                #region Debug outputs
+                if (debugLevel > 2)
                 {
-                    case 3:
-                        onlineListPrint = new List<String>() { "Analytalica" };
-                        break;
-                    case 4: 
-                        onlineListPrint = new List<String>() { "Analytalica", "Draeger" };
-                        break;
-                    case 5:
-                        onlineListPrint = new List<String>() { "Analytalica", "Draeger", "Adama42", "Robozman", "Smileynulk", "VladmirPut1n", "Barack0bama", "G3orgeBvsh", "J1mmyC4rter", "abrahamL1nc0ln", "ge0rge_wash1ngton", "ANDREWJACKS0N", "RichardNixxxon" };
-                        break;
-                }
-            }
-            #endregion
-            int len = onlineListPrint.Count;
-            if(len > 0){
-                if(len == 1){
-                    theList = onlineListPrint[0];
-                }else if(len == 2){
-                    theList = onlineListPrint[0] + " and " + onlineListPrint[1] + ".";
-                }else if(len > 2){
-
-                    StringBuilder sb = new StringBuilder();
-
-                    for(int n = 0; n < len - 1; n++){
-                        if (sb.ToString().Length - sb.ToString().LastIndexOf("\n") > 120)
-                            sb.Append("\n");
-                        sb.Append(onlineListPrint[n]).Append(", ");
+                    toConsole(3, "Debug level greater than 2. Test output enabled.");
+                    switch (debugLevel)
+                    {
+                        case 3:
+                            onlineListPrint = new List<String>() { "Analytalica" };
+                            break;
+                        case 4:
+                            onlineListPrint = new List<String>() { "Analytalica", "Draeger" };
+                            break;
+                        case 5:
+                            onlineListPrint = new List<String>() { "Analytalica", "Draeger", "Adama42", "Robozman", "Smileynulk", "VladmirPut1n", "Barack0bama", "G3orgeBvsh", "J1mmyC4rter", "abrahamL1nc0ln", "ge0rge_wash1ngton", "ANDREWJACKS0N", "RichardNixxxon" };
+                            break;
                     }
+                }
+                #endregion
+                int len = onlineListPrint.Count;
+                if (len > 0)
+                {
+                    if (len == 1)
+                    {
+                        theList = onlineListPrint[0];
+                    }
+                    else if (len == 2)
+                    {
+                        theList = onlineListPrint[0] + " and " + onlineListPrint[1] + ".";
+                    }
+                    else if (len > 2)
+                    {
 
-                    sb.Append("and ").Append(onlineListPrint[len - 1]).Append(".");
-                    theList = sb.ToString();
+                        StringBuilder sb = new StringBuilder();
+
+                        for (int n = 0; n < len - 1; n++)
+                        {
+                            if (sb.ToString().Length - sb.ToString().LastIndexOf("\n") > 120)
+                                sb.Append("\n");
+                            sb.Append(onlineListPrint[n]).Append(", ");
+                        }
+
+                        sb.Append("and ").Append(onlineListPrint[len - 1]).Append(".");
+                        theList = sb.ToString();
+                    }
+                }
+                toConsole(2, "[LIST] is " + theList);
+                if (theList.Length > 0)
+                {
+                    this.thanksOutput = thanksMessage.Replace("[LIST]", "\n" + theList + "\n");
+                    if (timeDelay < 2)
+                    {
+                        toChat(this.thanksOutput);
+                        this.thanksTimer.Stop();
+                    }
+                    else
+                    {
+                        this.thanksTimer = new Timer();
+                        this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
+                        this.thanksTimer.Interval = timeDelay * 1000;
+                        this.thanksTimer.Start();
+                    }
                 }
             }
-            toConsole(2, "[LIST] is " + theList);
-            if(theList.Length > 0){
-                this.thanksOutput = thanksMessage.Replace("[LIST]", "\n" + theList + "\n");
-                if (timeDelay < 2) {
-                    toChat(this.thanksOutput);
-                    this.thanksTimer.Stop();
-                }
-                else
-                {
-                    this.thanksTimer = new Timer();
-                    this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
-                    this.thanksTimer.Interval = timeDelay * 1000;
-                    this.thanksTimer.Start();
-                }
+            else
+            {
+                this.toConsole(2, "Plugin is disabled (thanksOut was called).");
             }
         }
 
         public void thanksOut(object source, ElapsedEventArgs e)
         {
-            toChat(this.thanksOutput);
-            this.thanksTimer.Stop();
+            if (pluginEnabled)
+            {
+                this.toConsole(2, "thanksOut Called.");
+                toChat(this.thanksOutput);
+                this.thanksTimer.Stop();
+            }
+            else
+            {
+                this.toConsole(2, "Plugin is disabled (thanksOut was called).");
+            }
         }
 
         //List plugin variables.
@@ -608,6 +650,7 @@ namespace PRoConEvents
             {
                 if(!String.IsNullOrEmpty(strValue)){
                     onlineListPrint = onlineList;
+                    toConsole(1, "Displaying donator test output...");
                     creditDonators();
                 }
             }
