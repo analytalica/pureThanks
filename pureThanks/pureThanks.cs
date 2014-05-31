@@ -58,7 +58,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.5.0";
+            return "1.5.1";
         }
 
         public string GetPluginAuthor()
@@ -533,9 +533,11 @@ namespace PRoConEvents
             else if (strVariable.Contains("Admin Message Interval"))
             {
                 adminTimeDelayString = strValue;
+                
                 try
                 {
                     adminTimeDelay = Int32.Parse(timeDelayString);
+                    this.listAdminsTimer.Interval = adminTimeDelay * 1000;
                 }
                 catch (Exception z)
                 {
