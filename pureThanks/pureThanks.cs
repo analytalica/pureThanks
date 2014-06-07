@@ -58,7 +58,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.5.2";
+            return "1.5.3";
         }
 
         public string GetPluginAuthor()
@@ -164,74 +164,58 @@ namespace PRoConEvents
         public void OnPluginLoaded(string strHostName, string strPort, string strPRoConVersion)
         {
             this.RegisterEvents(this.GetType().Name, "OnPluginLoaded", "OnRoundOver", "OnListPlayers");
-            this.chatTimer.Stop();
+
             this.chatTimer = new Timer();
             this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
             this.chatTimer.Interval = 800;
-            this.chatTimer.Start();
 			this.chatTimer.Stop();
-			
             this.toConsole(2, "chatTimer Initialized!");
-			this.listPlayersTimer.Stop();
+
 			this.listPlayersTimer = new Timer();
 			this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
 			this.listPlayersTimer.Interval = 5000;
-            this.listPlayersTimer.Start();
 			this.listPlayersTimer.Stop();
             this.toConsole(2, "listPlayersTimer Initialized!");
 
-            this.listAdminsTimer.Stop();
             this.listAdminsTimer = new Timer();
             this.listAdminsTimer.Elapsed += new ElapsedEventHandler(this.printAdmins);            
             this.listAdminsTimer.Interval = adminTimeDelay * 1000;
-            this.listAdminsTimer.Start();
 			this.listAdminsTimer.Stop();
-
             this.toConsole(2, "listAdminsTimer Initialized!");
 
-            this.thanksTimer.Stop();
             this.thanksTimer = new Timer();
             this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
             this.thanksTimer.Interval = timeDelay * 1000;
-            this.thanksTimer.Start();
             this.thanksTimer.Stop();
-
             this.toConsole(2, "thanksTimer Initialized!");
         }
 
         public void OnPluginEnable()
         {
             this.pluginEnabled = true;
-            this.toConsole(1, "pureThanks Enabled!");
-            this.chatTimer.Stop();
+
             this.chatTimer = new Timer();
             this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
             this.chatTimer.Interval = 800;
             this.chatTimer.Start();
-			
-            this.toConsole(2, "chatTimer Enabled!");
-			
-			this.listPlayersTimer.Stop();
-			this.listPlayersTimer = new Timer();
-			this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
-			this.listPlayersTimer.Interval = 5000;
-			this.listPlayersTimer.Start();
+            this.toConsole(2, "chatTimer Initialized!");
 
-            this.listAdminsTimer.Stop();
+            this.listPlayersTimer = new Timer();
+            this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
+            this.listPlayersTimer.Interval = 5000;
+            this.listPlayersTimer.Start();
+            this.toConsole(2, "listPlayersTimer Initialized!");
+
             this.listAdminsTimer = new Timer();
             this.listAdminsTimer.Elapsed += new ElapsedEventHandler(this.printAdmins);
             this.listAdminsTimer.Interval = adminTimeDelay * 1000;
             this.listAdminsTimer.Start();
+            this.toConsole(2, "listAdminsTimer Initialized!");
 
-			this.toConsole(2, "listPlayersTimer and listAdminsTimer Enabled!");
-
-            this.thanksTimer.Stop();
             this.thanksTimer = new Timer();
             this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
             this.thanksTimer.Interval = timeDelay * 1000;
             this.thanksTimer.Start();
-            this.thanksTimer.Stop();
-
             this.toConsole(2, "thanksTimer Initialized!");
             //creditDonators();
         }
@@ -290,6 +274,10 @@ namespace PRoConEvents
                     String output = adminsOnlineMessage.Replace("[LIST]", "\n" + LIST + "\n");
                     toChat(output);
                 }
+            }
+            else
+            {
+                this.toConsole(2, "Plugin is disabled (printAdmins was called).");
             }
         }
         private String getAdminListString(List<String> adminsOnlineList)
@@ -445,7 +433,7 @@ namespace PRoConEvents
             }
             else
             {
-                this.toConsole(2, "Plugin is disabled (thanksOut was called).");
+                this.toConsole(2, "Plugin is disabled (creditDonators was called).");
             }
         }
 
@@ -575,7 +563,6 @@ namespace PRoConEvents
             else if (strVariable.Contains("Admin Message Interval"))
             {
                 adminTimeDelayString = strValue;
-                
                 try
                 {
                     adminTimeDelay = Int32.Parse(timeDelayString);
@@ -585,6 +572,7 @@ namespace PRoConEvents
                 {
                     toConsole(1, "Invalid admin time delay! Use integer values only.");
                     adminTimeDelay = 60;
+                    this.listAdminsTimer.Interval = adminTimeDelay * 1000;
                     adminTimeDelayString = "60";
                 }
             }
