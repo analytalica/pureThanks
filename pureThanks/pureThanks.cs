@@ -37,7 +37,7 @@ namespace PRoConEvents
         private String timeDelayString = "25";
         private String adminTimeDelayString = "60";
         private int timeDelay = 25;
-        private int adminTimeDelay = 60;
+        private int adminTimeDelay = 60 * 1000;
 
         private Timer thanksTimer = new Timer();
         public string thanksOutput = "";
@@ -178,8 +178,8 @@ namespace PRoConEvents
             this.toConsole(2, "listPlayersTimer Initialized!");
 
             this.listAdminsTimer = new Timer();
-            this.listAdminsTimer.Elapsed += new ElapsedEventHandler(this.printAdmins);            
-            this.listAdminsTimer.Interval = adminTimeDelay * 1000;
+            this.listAdminsTimer.Elapsed += new ElapsedEventHandler(this.printAdmins);
+            this.listAdminsTimer.Interval = adminTimeDelay;
 			this.listAdminsTimer.Stop();
             this.toConsole(2, "listAdminsTimer Initialized!");
 
@@ -208,7 +208,7 @@ namespace PRoConEvents
 
             this.listAdminsTimer = new Timer();
             this.listAdminsTimer.Elapsed += new ElapsedEventHandler(this.printAdmins);
-            this.listAdminsTimer.Interval = adminTimeDelay * 1000;
+            this.listAdminsTimer.Interval = adminTimeDelay;
             this.listAdminsTimer.Start();
             this.toConsole(2, "listAdminsTimer Initialized!");
 
@@ -565,14 +565,15 @@ namespace PRoConEvents
                 adminTimeDelayString = strValue;
                 try
                 {
-                    adminTimeDelay = Int32.Parse(timeDelayString);
-                    this.listAdminsTimer.Interval = adminTimeDelay * 1000;
+                    adminTimeDelay = Int32.Parse(adminTimeDelayString) * 1000;
+
+                    this.listAdminsTimer.Interval = adminTimeDelay;
                 }
                 catch (Exception z)
                 {
                     toConsole(1, "Invalid admin time delay! Use integer values only.");
-                    adminTimeDelay = 60;
-                    this.listAdminsTimer.Interval = adminTimeDelay * 1000;
+                    adminTimeDelay = 60 * 1000;
+                    this.listAdminsTimer.Interval = adminTimeDelay;
                     adminTimeDelayString = "60";
                 }
             }
