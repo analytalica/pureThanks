@@ -58,7 +58,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.5.4";
+            return "1.5.5";
         }
 
         public string GetPluginAuthor()
@@ -218,6 +218,16 @@ namespace PRoConEvents
             this.thanksTimer.Start();
             this.toConsole(2, "thanksTimer Initialized!");
             //creditDonators();
+            this.donatorList = new List<String>();
+        //The List of admins as configured.
+            this.adminList = new List<String>();
+        //The list of donators immediately detected online.
+            this.onlineList = new List<String>();
+        //The list of admins immediately detected online.
+            this.adminsOnlineList = new List<String>();
+        //The list of players that will be thanked.
+            this.onlineListPrint = new List<String>();
+            this.toConsole(2, "Lists cleared!");
             this.toConsole(1, "pureThanks Enabled!");
         }
 
@@ -229,6 +239,16 @@ namespace PRoConEvents
             this.thanksTimer.Stop();
 			this.listPlayersTimer.Stop();
             this.listAdminsTimer.Stop();
+            this.donatorList = new List<String>();
+            //The List of admins as configured.
+            this.adminList = new List<String>();
+            //The list of donators immediately detected online.
+            this.onlineList = new List<String>();
+            //The list of admins immediately detected online.
+            this.adminsOnlineList = new List<String>();
+            //The list of players that will be thanked.
+            this.onlineListPrint = new List<String>();
+            this.toConsole(2, "Lists cleared!");
             this.toConsole(1, "pureThanks Disabled!");
             this.pluginEnabled = false;
         }
