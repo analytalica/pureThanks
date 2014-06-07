@@ -58,7 +58,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.5.5";
+            return "1.5.6";
         }
 
         public string GetPluginAuthor()
@@ -218,9 +218,7 @@ namespace PRoConEvents
             this.thanksTimer.Start();
             this.toConsole(2, "thanksTimer Initialized!");
             //creditDonators();
-            this.donatorList = new List<String>();
-        //The List of admins as configured.
-            this.adminList = new List<String>();
+
         //The list of donators immediately detected online.
             this.onlineList = new List<String>();
         //The list of admins immediately detected online.
@@ -239,9 +237,7 @@ namespace PRoConEvents
             this.thanksTimer.Stop();
 			this.listPlayersTimer.Stop();
             this.listAdminsTimer.Stop();
-            this.donatorList = new List<String>();
-            //The List of admins as configured.
-            this.adminList = new List<String>();
+
             //The list of donators immediately detected online.
             this.onlineList = new List<String>();
             //The list of admins immediately detected online.
