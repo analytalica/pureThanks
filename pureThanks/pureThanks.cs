@@ -58,7 +58,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.5.3";
+            return "1.5.4";
         }
 
         public string GetPluginAuthor()
@@ -218,6 +218,7 @@ namespace PRoConEvents
             this.thanksTimer.Start();
             this.toConsole(2, "thanksTimer Initialized!");
             //creditDonators();
+            this.toConsole(1, "pureThanks Enabled!");
         }
 
         public void OnPluginDisable()
@@ -266,13 +267,13 @@ namespace PRoConEvents
                 int numOfAdminsOnline = adminsOnlineList.Count;
                 if (numOfAdminsOnline == 0 && !noAdminsOnlineMessage.ToLower().Equals("none"))
                 {
-                    toChat(noAdminsOnlineMessage + "\n");
+                    this.toChat(noAdminsOnlineMessage + "\n");
                 }
                 else
                 {
                     String LIST = getAdminListString(adminsOnlineList);
                     String output = adminsOnlineMessage.Replace("[LIST]", "\n" + LIST + "\n");
-                    toChat(output);
+                    this.toChat(output);
                 }
             }
             else
@@ -330,8 +331,8 @@ namespace PRoConEvents
                         tempAdminsOnlineList.Add(player.SoldierName.Trim());
                     }
                 }
-                onlineList = newOnlineList;
-                adminsOnlineList = tempAdminsOnlineList;
+                this.onlineList = newOnlineList;
+                this.adminsOnlineList = tempAdminsOnlineList;
                 toConsole(2, "Donators/Volunteers found online: ");
                 if (debugLevel > 1)
                 {
@@ -355,9 +356,9 @@ namespace PRoConEvents
         {
             if (this.pluginEnabled)
             {
-                toConsole(2, "Round ended...");
-                onlineListPrint = onlineList;
-                creditDonators();
+                this.toConsole(2, "Round ended...");
+                this.onlineListPrint = this.onlineList;
+                this.creditDonators();
                 //this.ExecuteCommand("procon.protected.send", "admin.listPlayers", "all");
             }
         }
@@ -419,7 +420,7 @@ namespace PRoConEvents
                     this.thanksOutput = thanksMessage.Replace("[LIST]", "\n" + theList + "\n");
                     if (timeDelay < 2)
                     {
-                        toChat(this.thanksOutput);
+                        this.toChat(this.thanksOutput);
                         this.thanksTimer.Stop();
                     }
                     else
@@ -442,12 +443,13 @@ namespace PRoConEvents
             if (pluginEnabled)
             {
                 this.toConsole(2, "thanksOut Called.");
-                toChat(this.thanksOutput);
+                this.toChat(this.thanksOutput);
                 this.thanksTimer.Stop();
             }
             else
             {
-                this.toConsole(2, "Plugin is disabled (thanksOut was called).");
+                this.toConsole(2, "Plugin is disabled (thanksOut was called). It will be stopped.");
+                this.thanksTimer.Stop();
             }
         }
 
@@ -638,9 +640,10 @@ namespace PRoConEvents
             else if (strVariable.Contains("Test output...") && !strVariable.Contains("Admin"))
             {
                 if(!String.IsNullOrEmpty(strValue)){
-                    onlineListPrint = onlineList;
+                    this.onlineListPrint = onlineList;
                     toConsole(1, "Displaying donator test output...");
-                    creditDonators();
+                    toConsole(1, "Simulating a round over event...");
+                    this.OnRoundOver(1);
                 }
             }
         }
