@@ -163,74 +163,90 @@ namespace PRoConEvents
 
         public void OnPluginLoaded(string strHostName, string strPort, string strPRoConVersion)
         {
-            this.RegisterEvents(this.GetType().Name, "OnPluginLoaded", "OnRoundOver", "OnListPlayers");
+            try
+            {
+                this.RegisterEvents(this.GetType().Name, "OnPluginLoaded", "OnRoundOver", "OnListPlayers");
 
-            this.chatTimer = new Timer();
-            this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
-            this.chatTimer.Interval = 800;
-			this.chatTimer.Stop();
-            this.toConsole(2, "chatTimer Initialized!");
+                this.chatTimer = new Timer();
+                this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
+                this.chatTimer.Interval = 800;
+                this.chatTimer.Stop();
+                this.toConsole(2, "chatTimer Initialized!");
 
-			this.listPlayersTimer = new Timer();
-			this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
-			this.listPlayersTimer.Interval = 5000;
-			this.listPlayersTimer.Stop();
-            this.toConsole(2, "listPlayersTimer Initialized!");
+                this.listPlayersTimer = new Timer();
+                this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
+                this.listPlayersTimer.Interval = 5000;
+                this.listPlayersTimer.Stop();
+                this.toConsole(2, "listPlayersTimer Initialized!");
 
-            this.listAdminsTimer = new Timer();
-            this.listAdminsTimer.Elapsed += new ElapsedEventHandler(this.printAdmins);
-            this.listAdminsTimer.Interval = adminTimeDelay;
-			this.listAdminsTimer.Stop();
-            this.toConsole(2, "listAdminsTimer Initialized!");
+                this.listAdminsTimer = new Timer();
+                this.listAdminsTimer.Elapsed += new ElapsedEventHandler(this.printAdmins);
+                this.listAdminsTimer.Interval = adminTimeDelay;
+                this.listAdminsTimer.Stop();
+                this.toConsole(2, "listAdminsTimer Initialized!");
 
-            this.thanksTimer = new Timer();
-            this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
-            this.thanksTimer.Interval = timeDelay * 1000;
-            this.thanksTimer.Stop();
-            this.toConsole(2, "thanksTimer Initialized!");
+                this.thanksTimer = new Timer();
+                this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
+                this.thanksTimer.Interval = timeDelay * 1000;
+                this.thanksTimer.Stop();
+                this.toConsole(2, "thanksTimer Initialized!");
+            }
+            catch (Exception e)
+            {
+                this.toConsole(1, e.ToString());
+            }
         }
 
         public void OnPluginEnable()
         {
-            this.pluginEnabled = true;
+            try
+            {
+                this.pluginEnabled = true;
 
-            this.chatTimer = new Timer();
-            this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
-            this.chatTimer.Interval = 800;
-            this.chatTimer.Start();
-            this.toConsole(2, "chatTimer Initialized!");
+                this.chatTimer = new Timer();
+                this.chatTimer.Elapsed += new ElapsedEventHandler(this.chatOut);
+                this.chatTimer.Interval = 800;
+                this.chatTimer.Start();
+                this.toConsole(2, "chatTimer Initialized!");
 
-            this.listPlayersTimer = new Timer();
-            this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
-            this.listPlayersTimer.Interval = 5000;
-            this.listPlayersTimer.Start();
-            this.toConsole(2, "listPlayersTimer Initialized!");
+                this.listPlayersTimer = new Timer();
+                this.listPlayersTimer.Elapsed += new ElapsedEventHandler(this.callListPlayers);
+                this.listPlayersTimer.Interval = 5000;
+                this.listPlayersTimer.Start();
+                this.toConsole(2, "listPlayersTimer Initialized!");
 
-            this.listAdminsTimer = new Timer();
-            this.listAdminsTimer.Elapsed += new ElapsedEventHandler(this.printAdmins);
-            this.listAdminsTimer.Interval = adminTimeDelay;
-            this.listAdminsTimer.Start();
-            this.toConsole(2, "listAdminsTimer Initialized!");
+                this.listAdminsTimer = new Timer();
+                this.listAdminsTimer.Elapsed += new ElapsedEventHandler(this.printAdmins);
+                this.listAdminsTimer.Interval = adminTimeDelay;
+                this.listAdminsTimer.Start();
+                this.toConsole(2, "listAdminsTimer Initialized!");
 
-            this.thanksTimer = new Timer();
-            this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
-            this.thanksTimer.Interval = timeDelay * 1000;
-            this.thanksTimer.Start();
-            this.toConsole(2, "thanksTimer Initialized!");
-            //creditDonators();
+                this.thanksTimer = new Timer();
+                this.thanksTimer.Elapsed += new ElapsedEventHandler(this.thanksOut);
+                this.thanksTimer.Interval = timeDelay * 1000;
+                this.thanksTimer.Start();
+                this.toConsole(2, "thanksTimer Initialized!");
+                //creditDonators();
 
-        //The list of donators immediately detected online.
-            this.onlineList = new List<String>();
-        //The list of admins immediately detected online.
-            this.adminsOnlineList = new List<String>();
-        //The list of players that will be thanked.
-            this.onlineListPrint = new List<String>();
-            this.toConsole(2, "Lists cleared!");
-            this.toConsole(1, "pureThanks Enabled!");
+                //The list of donators immediately detected online.
+                this.onlineList = new List<String>();
+                //The list of admins immediately detected online.
+                this.adminsOnlineList = new List<String>();
+                //The list of players that will be thanked.
+                this.onlineListPrint = new List<String>();
+                this.toConsole(2, "Lists cleared!");
+                this.toConsole(1, "pureThanks Enabled!");
+            }
+            catch (Exception e)
+            {
+                this.toConsole(1, e.ToString());
+            }
         }
 
         public void OnPluginDisable()
         {
+            try
+            {
             //onlineListPrint = onlineList;
             //creditDonators();
             this.chatTimer.Stop();
@@ -247,6 +263,11 @@ namespace PRoConEvents
             this.toConsole(2, "Lists cleared!");
             this.toConsole(1, "pureThanks Disabled!");
             this.pluginEnabled = false;
+            }
+            catch (Exception e)
+            {
+                this.toConsole(1, e.ToString());
+            }
         }
 		
 		public void callListPlayers(object source, ElapsedEventArgs e){
@@ -532,135 +553,143 @@ namespace PRoConEvents
         //Set variables.
         public void SetPluginVariable(String strVariable, String strValue)
         {
-            if (strVariable.Contains("Soldier name:"))
+            try
             {
-                int n = getConfigIndex(strVariable);
-                try
+                if (strVariable.Contains("Soldier name:"))
                 {
-                    donatorList[n] = strValue.Trim().ToLower();
+                    int n = getConfigIndex(strVariable);
+                    try
+                    {
+                        donatorList[n] = strValue.Trim().ToLower();
+                    }
+                    catch (ArgumentOutOfRangeException e)
+                    {
+                        donatorList.Add(strValue.Trim().ToLower());
+                    }
                 }
-                catch (ArgumentOutOfRangeException e)
+                else if (strVariable.Contains("Add a soldier name"))
                 {
                     donatorList.Add(strValue.Trim().ToLower());
                 }
-            }
-            else if (strVariable.Contains("Add a soldier name"))
-            {
-                donatorList.Add(strValue.Trim().ToLower());
-            }
-            else if (strVariable.Contains("Admin name:"))
-            {
-                int n = getConfigIndex(strVariable);
-                try
+                else if (strVariable.Contains("Admin name:"))
                 {
-                    adminList[n] = strValue.Trim().ToLower();
+                    int n = getConfigIndex(strVariable);
+                    try
+                    {
+                        adminList[n] = strValue.Trim().ToLower();
+                    }
+                    catch (ArgumentOutOfRangeException e)
+                    {
+                        adminList.Add(strValue.Trim().ToLower());
+                    }
                 }
-                catch (ArgumentOutOfRangeException e)
+                else if (strVariable.Contains("Add an admin"))
                 {
                     adminList.Add(strValue.Trim().ToLower());
                 }
-            }
-            else if (strVariable.Contains("Add an admin"))
-            {
-                adminList.Add(strValue.Trim().ToLower());
-            }
-            else if (strVariable.Contains("Debug Level"))
-            {
-                debugLevelString = strValue;
-                try
+                else if (strVariable.Contains("Debug Level"))
                 {
-                    debugLevel = Int32.Parse(debugLevelString);
+                    debugLevelString = strValue;
+                    try
+                    {
+                        debugLevel = Int32.Parse(debugLevelString);
+                    }
+                    catch (Exception z)
+                    {
+                        toConsole(1, "Invalid debug level! Choose 0, 1, or 2 only.");
+                        debugLevel = 1;
+                        debugLevelString = "1";
+                    }
                 }
-                catch (Exception z)
+                else if (strVariable.Contains("Admin Message Interval"))
                 {
-                    toConsole(1, "Invalid debug level! Choose 0, 1, or 2 only.");
-                    debugLevel = 1;
-                    debugLevelString = "1";
-                }
-            }
-            else if (strVariable.Contains("Admin Message Interval"))
-            {
-                adminTimeDelayString = strValue;
-                try
-                {
-                    adminTimeDelay = Int32.Parse(adminTimeDelayString) * 1000;
+                    adminTimeDelayString = strValue;
+                    try
+                    {
+                        adminTimeDelay = Int32.Parse(adminTimeDelayString) * 1000;
 
-                    this.listAdminsTimer.Interval = adminTimeDelay;
+                        this.listAdminsTimer.Interval = adminTimeDelay;
+                    }
+                    catch (Exception z)
+                    {
+                        toConsole(1, "Invalid admin time delay! Use integer values only.");
+                        adminTimeDelay = 60 * 1000;
+                        this.listAdminsTimer.Interval = adminTimeDelay;
+                        adminTimeDelayString = "60";
+                    }
                 }
-                catch (Exception z)
+                else if (strVariable.Contains("Message Time Delay") && !strVariable.Contains("Admin"))
                 {
-                    toConsole(1, "Invalid admin time delay! Use integer values only.");
-                    adminTimeDelay = 60 * 1000;
-                    this.listAdminsTimer.Interval = adminTimeDelay;
-                    adminTimeDelayString = "60";
+                    timeDelayString = strValue;
+                    try
+                    {
+                        timeDelay = Int32.Parse(timeDelayString);
+                    }
+                    catch (Exception z)
+                    {
+                        toConsole(1, "Invalid time delay! Use integer values only.");
+                        timeDelay = 25;
+                        timeDelayString = "25";
+                    }
+                }
+                else if (strVariable.Contains("Thanks Message"))
+                {
+                    if (!String.IsNullOrEmpty(strValue.Trim()))
+                    {
+                        thanksMessage = strValue.Trim();
+                    }
+                    else
+                    {
+                        toConsole(1, "Resetting thanks message...");
+                        thanksMessage = "Thanks to our active donors & volunteers online: [LIST]";
+                    }
+                }
+                else if (strVariable.Contains("Admins Online Message") && !strVariable.Contains("No "))
+                {
+                    if (!String.IsNullOrEmpty(strValue.Trim()))
+                    {
+                        adminsOnlineMessage = strValue.Trim();
+                    }
+                    else
+                    {
+                        toConsole(1, "Resetting admins online message...");
+                        adminsOnlineMessage = "The following admins are currently online: [LIST]";
+                    }
+                }
+                else if (strVariable.Contains("No Admins Online Message"))
+                {
+                    if (!String.IsNullOrEmpty(strValue.Trim()))
+                    {
+                        noAdminsOnlineMessage = strValue.Trim();
+                    }
+                    else
+                    {
+                        toConsole(1, "Resetting no admins online message...");
+                        noAdminsOnlineMessage = "There are currently no admins online, use !pageadmin to page an admin";
+                    }
+                }
+                else if (strVariable.Contains("Admin Test output..."))
+                {
+                    if (!String.IsNullOrEmpty(strValue))
+                    {
+                        toConsole(1, "Displaying Test Output...");
+                        printAdmins(null, null);
+                    }
+                }
+                else if (strVariable.Contains("Test output...") && !strVariable.Contains("Admin"))
+                {
+                    if (!String.IsNullOrEmpty(strValue))
+                    {
+                        this.onlineListPrint = onlineList;
+                        toConsole(1, "Displaying donator test output...");
+                        toConsole(1, "Simulating a round over event...");
+                        this.OnRoundOver(1);
+                    }
                 }
             }
-            else if (strVariable.Contains("Message Time Delay") && !strVariable.Contains("Admin"))
+            catch (Exception e)
             {
-                timeDelayString = strValue;
-                try
-                {
-                    timeDelay = Int32.Parse(timeDelayString);
-                }
-                catch (Exception z)
-                {
-                    toConsole(1, "Invalid time delay! Use integer values only.");
-                    timeDelay = 25;
-                    timeDelayString = "25";
-                }
-            }
-            else if (strVariable.Contains("Thanks Message"))
-            {
-                if (!String.IsNullOrEmpty(strValue.Trim()))
-                {
-                    thanksMessage = strValue.Trim();
-                }
-                else
-                {
-                    toConsole(1, "Resetting thanks message...");
-                    thanksMessage = "Thanks to our active donors & volunteers online: [LIST]";
-                }
-            }
-            else if (strVariable.Contains("Admins Online Message") && !strVariable.Contains("No "))
-            {
-                if (!String.IsNullOrEmpty(strValue.Trim()))
-                {
-                    adminsOnlineMessage = strValue.Trim();
-                }
-                else
-                {
-                    toConsole(1, "Resetting admins online message...");
-                    adminsOnlineMessage = "The following admins are currently online: [LIST]";
-                }
-            }
-            else if (strVariable.Contains("No Admins Online Message"))
-            {
-                if (!String.IsNullOrEmpty(strValue.Trim()))
-                {
-                    noAdminsOnlineMessage = strValue.Trim();
-                }
-                else
-                {
-                    toConsole(1, "Resetting no admins online message...");
-                    noAdminsOnlineMessage = "There are currently no admins online, use !pageadmin to page an admin";
-                }
-            }
-            else if (strVariable.Contains("Admin Test output..."))
-            {
-                if (!String.IsNullOrEmpty(strValue))
-                {
-                    toConsole(1, "Displaying Test Output...");
-                    printAdmins(null, null);
-                }
-            }
-            else if (strVariable.Contains("Test output...") && !strVariable.Contains("Admin"))
-            {
-                if(!String.IsNullOrEmpty(strValue)){
-                    this.onlineListPrint = onlineList;
-                    toConsole(1, "Displaying donator test output...");
-                    toConsole(1, "Simulating a round over event...");
-                    this.OnRoundOver(1);
-                }
+                this.toConsole(1, e.ToString());
             }
         }
     }
