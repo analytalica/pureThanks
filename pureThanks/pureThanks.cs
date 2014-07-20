@@ -58,7 +58,7 @@ namespace PRoConEvents
 
         public string GetPluginVersion()
         {
-            return "1.5.6";
+            return "1.5.7";
         }
 
         public string GetPluginAuthor()
@@ -334,7 +334,7 @@ namespace PRoConEvents
                 StringBuilder outStringBuilder = new StringBuilder();
                 for (int n = 0 ; n < numOfAdminsOnline - 1; n++)
                 {
-                    if (outStringBuilder.ToString().Length - outStringBuilder.ToString().LastIndexOf("\n") > 120)
+                    if (outStringBuilder.ToString().Length - outStringBuilder.ToString().LastIndexOf("\n") > 100)
                         outStringBuilder.Append("\n");
                     outStringBuilder.Append(adminsOnlineList[n]).Append(", ");
                 }
@@ -442,7 +442,7 @@ namespace PRoConEvents
 
                         for (int n = 0; n < len - 1; n++)
                         {
-                            if (sb.ToString().Length - sb.ToString().LastIndexOf("\n") > 120)
+                            if (sb.ToString().Length - sb.ToString().LastIndexOf("\n") > 100)
                                 sb.Append("\n");
                             sb.Append(onlineListPrint[n]).Append(", ");
                         }
